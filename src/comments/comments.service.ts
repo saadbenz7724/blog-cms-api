@@ -49,9 +49,9 @@ export class CommentsService {
 
     const qb = this.commentRepository
       .createQueryBuilder('comment')
-      .leftJoinAndSelect('comment.user', 'user')
-      .where('comment.post_id = :postId', { postId })
-      .andWhere('comment.is_deleted = false')
+      .leftJoin('comment.user', 'user')
+      .where('comment.postId = :postId', { postId })
+      .andWhere('comment.isDeleted = false')
       .select([
         'comment.id',
         'comment.content',
@@ -62,7 +62,7 @@ export class CommentsService {
         'user.fullName',
         'user.avatar',
       ])
-      .orderBy('comment.created_at', 'DESC');
+      .orderBy('comment.createdAt', 'DESC');
 
     const skip = (page - 1) * limit;
     qb.skip(skip).take(limit);

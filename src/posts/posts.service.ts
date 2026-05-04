@@ -122,9 +122,9 @@ export class PostsService {
 
     const qb = this.postRepository
       .createQueryBuilder('post')
-      .leftJoinAndSelect('post.author', 'author')
-      .leftJoinAndSelect('post.category', 'category')
-      .leftJoinAndSelect('post.tags', 'tags')
+      .leftJoin('post.author', 'author')
+      .leftJoin('post.category', 'category')
+      .leftJoin('post.tags', 'tags')
       .where('post.is_deleted = false')
       .andWhere('post.status = :status', { status: PostStatus.PUBLISHED })
       .select([
@@ -158,7 +158,7 @@ export class PostsService {
     }
 
     if (categoryId) {
-      qb.andWhere('post.category_id = :categoryId', { categoryId });
+      qb.andWhere('post.categoryId = :categoryId', { categoryId });
     }
 
     if (tagId) {
@@ -166,10 +166,10 @@ export class PostsService {
     }
 
     if (authorId) {
-      qb.andWhere('post.author_id = :authorId', { authorId });
+      qb.andWhere('post.authorId = :authorId', { authorId });
     }
 
-    qb.orderBy('post.published_at', 'DESC');
+    qb.orderBy('post.publishedAt', 'DESC');
 
     const skip = (page - 1) * limit;
     qb.skip(skip).take(limit);
@@ -201,14 +201,14 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.category', 'category')
       .leftJoinAndSelect('post.tags', 'tags')
-      .where('post.author_id = :authorId', { authorId })
-      .andWhere('post.is_deleted = false');
+      .where('post.authorId = :authorId', { authorId })
+      .andWhere('post.isDeleted = false');
 
     if (status) {
       qb.andWhere('post.status = :status', { status });
     }
 
-    qb.orderBy('post.created_at', 'DESC');
+    qb.orderBy('post.createdAt', 'DESC');
 
     const skip = (page - 1) * limit;
     qb.skip(skip).take(limit);
